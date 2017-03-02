@@ -255,10 +255,12 @@ class Base {
                 $response = @snmpget($this->host, $this->community, $oid, $this->getTimeout(), $this->retry);
                 break;
 
+            case \SNMP::VERSION_2c:
             case '2c':
                 $response = @snmp2_get($this->host, $this->community, $oid, $this->getTimeout(), $this->retry);
                 break;
 
+            case \SNMP::VERSION_3:
             case '3':
                 //@todo To implement snmp v3
 //                $response = @snmp3_get($this->host, $this->community, $oid, $this->getTimeout(), $this->retry);
@@ -349,7 +351,7 @@ class Base {
      *
      * @return string
      */
-    public function detectVersion($forceDetect = false)
+    protected function detectVersion($forceDetect = false)
     {
         if (!$this->version || $forceDetect) {
             if ($this->get($this->detectOid, '2c')) {
@@ -369,7 +371,7 @@ class Base {
      *
      * @return mixed
      */
-    public function parse($snmpString)
+    protected function parse($snmpString)
     {
         if (empty($snmpString) || $snmpString === '""') {
             return '';
@@ -457,26 +459,6 @@ class Base {
     }
 
     /**
-     * Get device vendor
-     *
-     * @return string
-     */
-    public function getVendor()
-    {
-        return __FUNCTION__ . ' not supported';
-    }
-
-    /**
-     * Get device model
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return __FUNCTION__ . ' not supported';
-    }
-
-    /**
      * Get SNMP Host
      *
      * @return string
@@ -505,5 +487,4 @@ class Base {
     {
         return $this->version;
     }
-
 }

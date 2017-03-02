@@ -14,11 +14,11 @@ use Azurre\Component\Snmp\Vendor\Base as BaseVendor;
  * Class Client
  * @package Azurre\Component\Snmp
  *
- * @method string getVendor()
+ * @method string getVendorName()
  * @method string getModel()
  * @method string getSystem()
  * @method string getSystemName()
- * @method int|string getUptime($format = '')
+ * @method int|string getUptime($format = '%ad %hh %im %ss')
  * @method array getInterfacesRx()
  * @method array getInterfacesTx()
  * @method array getInterfacesSpeed()
@@ -55,7 +55,7 @@ class Client {
             return call_user_func_array([$this->vendorInstance, $method], $args);
         }
 
-        return 'Not supported';
+        return "Method '{$method}' is not supported on this device";
     }
 
     /**
@@ -129,4 +129,19 @@ class Client {
         return $firstCharCaps ? ucfirst($return) : lcfirst($return);
     }
 
+    /**
+     * Return available methods
+     *
+     * @return array
+     */
+    public function getMethodsAvailable()
+    {
+        $list = get_class_methods($this->vendorInstance);
+        $list = array_filter($list, function($method){
+            return is_callable([$this->vendorInstance, $method]) && $method !== '__construct';
+        });
+        sort($list);
+
+        return $list;
+    }
 }

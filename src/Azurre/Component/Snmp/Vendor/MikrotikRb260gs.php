@@ -14,10 +14,4 @@ class MikrotikRb260gs extends Mikrotik{
     {
         return parent::getInterfaces($addNumber, $addIndex);
     }
-
-    public function getFdbList()
-    {
-        return __FUNCTION__ . ' not supported';
-    }
-
 }
